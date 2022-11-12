@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: db
+    networks:
+      - default
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=root
+    image: postgres:14.3-alpine
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ./app
+    ports:
+      - "80:8080"
+    depends_on:
+      - db
+    networks:
+      default:
